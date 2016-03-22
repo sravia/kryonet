@@ -1,0 +1,12 @@
+{
+  "buildings": [
+    {
+      "id": "1",
+      "name": "Town hall"
+    },
+    {
+      "id": "2",
+      "name": "Wall"
+    }
+  ]
+}
