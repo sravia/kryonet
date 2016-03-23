@@ -1,5 +1,6 @@
 package com.server;
 
+import com.server.game.Game;
 import com.server.net.Network;
 
 public class Client {
@@ -8,7 +9,9 @@ public class Client {
 
     public Client() throws Exception {
         network = new Network();
-        network.start();
+        //network.start();
+
+        new Game();
     }
 
     public static void main(String[] args) throws Exception {
