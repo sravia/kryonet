@@ -1,11 +1,17 @@
 package com.server.game;
 
+import com.server.game.entities.Camera;
+import com.server.game.entities.Entity;
+import com.server.game.entities.Light;
 import com.server.game.model.RawModel;
 import com.server.game.model.TexturedModel;
+import com.server.game.rendering.OBJLoader;
+import com.server.game.rendering.Renderer;
 import com.server.game.shaders.StaticShader;
 import com.server.game.textures.ModelTexture;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.Vector3f;
 
 public class Game {
 
@@ -17,37 +23,27 @@ public class Game {
         createDisplay();
 
         Loader loader = new Loader();
-        Renderer renderer = new Renderer();
         StaticShader shader = new StaticShader();
+        Renderer renderer = new Renderer(shader);
 
+        RawModel model = OBJLoader.loadObjModel("dragon",loader);
 
-        float[] vertices = {
-                -0.5f,0.5f,0,   //V0
-                -0.5f,-0.5f,0,  //V1
-                0.5f,-0.5f,0,   //V2
-                0.5f,0.5f,0     //V3
-        };
-
-        int[] indices = {
-                0,1,3,  //Top left triangle (V0,V1,V3)
-                3,1,2   //Bottom right triangle (V3,V1,V2)
-        };
-
-        float[] textureCoords = {
-            0,0,
-                0,1,
-                1,1,
-                1,0
-        };
-
-        RawModel model = loader.loadToVAO(vertices,textureCoords,indices);
-        ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
-        TexturedModel texturedModel = new TexturedModel(model,texture);
+        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("stallTexture")));
+        ModelTexture texture = staticModel.getTexture();
+        texture.setShineDamper(10);
+        texture.setReflectivity(1);
+        Entity entity = new Entity(staticModel, new Vector3f(0,0,-50),0,0,0,1);
+        Light light = new Light(new Vector3f(0,0,-20),new Vector3f(1,1,1));
+        Camera camera = new Camera();
 
         while (!Display.isCloseRequested()) {
+            entity.increaseRotation(0, 1, 0);
+            camera.move();
             renderer.prepare();
             shader.start();
-            renderer.render(texturedModel);
+            shader.loadLight(light);
+            shader.loadViewMatrix(camera);
+            renderer.render(entity,shader);
             shader.stop();
             updateDisplay();
         }
