@@ -1,15 +1,18 @@
-package com.server.game.shaders;
+package com.server.game.shaders.terrain;
 
 import com.server.Config;
 import com.server.game.entities.Camera;
 import com.server.game.entities.Light;
+import com.server.game.shaders.ShaderProgram;
 import com.server.game.toolbox.Maths;
 import org.lwjgl.util.vector.Matrix4f;
 
-public class StaticShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = Config.GAME_PATH + "shaders/vertexShader.txt";
-    private static final String FRAGMENT_FILE = Config.GAME_PATH + "shaders/fragmentShader.txt";
+public class TerrainShader extends ShaderProgram {
+
+
+    private static final String VERTEX_FILE = Config.GAME_PATH + "shaders/terrain/terrainVertexShader.txt";
+    private static final String FRAGMENT_FILE = Config.GAME_PATH + "shaders/terrain/terrainFragmentShader.txt";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;
@@ -19,7 +22,7 @@ public class StaticShader extends ShaderProgram {
     private int location_shineDamper;
     private int location_reflectivity;
 
-    public StaticShader() {
+    public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
 
@@ -42,25 +45,26 @@ public class StaticShader extends ShaderProgram {
 
     }
 
-    public void loadShineVariables(float damper,float reflectivity){
+    public void loadShineVariables(float damper, float reflectivity) {
         super.loadFloat(location_shineDamper, damper);
         super.loadFloat(location_reflectivity, reflectivity);
     }
 
-    public void loadTransformationMatrix(Matrix4f matrix){
+    public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);
     }
 
-    public void loadLight(Light light){
+    public void loadLight(Light light) {
         super.loadVector(location_lightPosition, light.getPosition());
         super.loadVector(location_lightColour, light.getColour());
     }
 
-    public void loadViewMatrix(Camera camera){
+    public void loadViewMatrix(Camera camera) {
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         super.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
-    public void loadProjectionMatrix(Matrix4f projection){
+    public void loadProjectionMatrix(Matrix4f projection) {
         super.loadMatrix(location_projectionMatrix, projection);
-    }}
+    }
+}
