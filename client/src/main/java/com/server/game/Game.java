@@ -6,9 +6,11 @@ import com.server.game.entities.Light;
 import com.server.game.model.RawModel;
 import com.server.game.model.TexturedModel;
 import com.server.game.rendering.MasterRenderer;
-import com.server.game.rendering.OBJLoader;
+import com.server.game.rendering.loaders.OBJLoader;
 import com.server.game.terrain.Terrain;
 import com.server.game.textures.ModelTexture;
+import com.server.game.textures.TerrainTexture;
+import com.server.game.textures.TerrainTexturePack;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector3f;
@@ -28,10 +30,20 @@ public class Game {
 
         Loader loader = new Loader();
 
+        TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
+        TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
+        TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("pinkFlowers"));
+        TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+
+        TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+
+
         RawModel model = OBJLoader.loadObjModel("tree", loader);
 
-        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("grass")));
-
+        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("tree")));
+staticModel.getTexture().setHasTransparency(true);
+        staticModel.getTexture().setUseFakeLighting(true);
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
         for(int i=0;i<500;i++){
@@ -40,8 +52,8 @@ public class Game {
 
         Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
 
-        Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
-        Terrain terrain2 = new Terrain(1,0,loader,new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain = new Terrain(0,0,loader,texturePack,blendMap);
+        Terrain terrain2 = new Terrain(1,0,loader,texturePack,blendMap);
 
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
