@@ -42,7 +42,7 @@ public class Game {
         RawModel model = OBJLoader.loadObjModel("tree", loader);
 
         TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("tree")));
-staticModel.getTexture().setHasTransparency(true);
+        staticModel.getTexture().setHasTransparency(true);
         staticModel.getTexture().setUseFakeLighting(true);
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
@@ -52,8 +52,8 @@ staticModel.getTexture().setHasTransparency(true);
 
         Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
 
-        Terrain terrain = new Terrain(0,0,loader,texturePack,blendMap);
-        Terrain terrain2 = new Terrain(1,0,loader,texturePack,blendMap);
+        Terrain terrain = new Terrain(0,0,loader,texturePack,blendMap,"heightmap");
+        Terrain terrain2 = new Terrain(1,0,loader,texturePack,blendMap,"heightmap");
 
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
