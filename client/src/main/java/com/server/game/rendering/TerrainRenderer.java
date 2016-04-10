@@ -1,11 +1,8 @@
 package com.server.game.rendering;
 
-import com.server.game.entities.Entity;
 import com.server.game.model.RawModel;
-import com.server.game.model.TexturedModel;
 import com.server.game.shaders.terrain.TerrainShader;
 import com.server.game.terrain.Terrain;
-import com.server.game.textures.ModelTexture;
 import com.server.game.textures.TerrainTexturePack;
 import com.server.game.toolbox.Maths;
 import org.lwjgl.opengl.GL11;

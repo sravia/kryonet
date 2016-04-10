@@ -10,13 +10,17 @@ public class ModelTexture {
     private boolean hasTransparency = false;
     private boolean useFakeLighting = false;
 
-    public ModelTexture(int textureID){
+    public ModelTexture(int textureID) {
         this.textureID = textureID;
     }
 
 
     public boolean isHasTransparency() {
         return hasTransparency;
+    }
+
+    public void setHasTransparency(boolean hasTransparency) {
+        this.hasTransparency = hasTransparency;
     }
 
     public boolean isUseFakeLighting() {
@@ -27,11 +31,7 @@ public class ModelTexture {
         this.useFakeLighting = useFakeLighting;
     }
 
-    public void setHasTransparency(boolean hasTransparency) {
-        this.hasTransparency = hasTransparency;
-    }
-
-    public int getTextureID(){
+    public int getTextureID() {
         return this.textureID;
     }
 

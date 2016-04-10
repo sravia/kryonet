@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.lwjgl.opengl.GL11.glPolygonMode;
+
 public class Game {
 
     private static final int WIDTH = 1280;
@@ -38,32 +40,35 @@ public class Game {
         TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
+        Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap, "heightmap");
+        Terrain terrain2 = new Terrain(-1, 0, loader, texturePack, blendMap, "heightmap");
 
         RawModel model = OBJLoader.loadObjModel("tree", loader);
 
-        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("tree")));
+        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
         staticModel.getTexture().setHasTransparency(true);
         staticModel.getTexture().setUseFakeLighting(true);
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
-        for(int i=0;i<500;i++){
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,3));
+        for (int i = 0; i < 500; i++) {
+            float x = random.nextFloat() * 300;
+            float z = random.nextFloat() * 100;
+            float y = terrain.getHeightOfTerrain(x,z);
+            entities.add(new Entity(staticModel, new Vector3f(x, y, z), 0, random.nextFloat()*360, 0, 0.9f));
         }
 
-        Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
+        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
-        Terrain terrain = new Terrain(0,0,loader,texturePack,blendMap,"heightmap");
-        Terrain terrain2 = new Terrain(1,0,loader,texturePack,blendMap,"heightmap");
 
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
 
-        while(!Display.isCloseRequested()){
+        while (!Display.isCloseRequested()) {
             camera.move();
 
             renderer.processTerrain(terrain);
             renderer.processTerrain(terrain2);
-            for(Entity entity:entities){
+            for (Entity entity : entities) {
                 renderer.processEntity(entity);
             }
             renderer.render(light, camera);

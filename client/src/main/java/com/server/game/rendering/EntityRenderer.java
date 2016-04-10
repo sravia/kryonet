@@ -6,7 +6,10 @@ import com.server.game.model.TexturedModel;
 import com.server.game.shaders.StaticShader;
 import com.server.game.textures.ModelTexture;
 import com.server.game.toolbox.Maths;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.Map;
 public class EntityRenderer {
     private StaticShader shader;
 
-    public EntityRenderer(StaticShader shader,Matrix4f projectionMatrix) {
+    public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
@@ -42,7 +45,7 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
         ModelTexture texture = model.getTexture();
-        if(texture.isHasTransparency()){
+        if (texture.isHasTransparency()) {
             MasterRenderer.disableCulling();
         }
         shader.loadFakeLightingVariable(texture.isUseFakeLighting());
@@ -64,7 +67,6 @@ public class EntityRenderer {
                 entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
     }
-
 
 
 }
