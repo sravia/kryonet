@@ -3,6 +3,8 @@ package com.server.game;
 import com.server.game.entities.Camera;
 import com.server.game.entities.Entity;
 import com.server.game.entities.Light;
+import com.server.game.gui.GuiRenderer;
+import com.server.game.gui.GuiTexture;
 import com.server.game.model.RawModel;
 import com.server.game.model.TexturedModel;
 import com.server.game.rendering.MasterRenderer;
@@ -13,6 +15,7 @@ import com.server.game.textures.TerrainTexture;
 import com.server.game.textures.TerrainTexturePack;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -91,6 +94,12 @@ public class Game {
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
 
+
+        List<GuiTexture> guis = new ArrayList<GuiTexture>();
+        GuiTexture health = new GuiTexture(loader.loadTexture("health"), new Vector2f(-0.74f, 0.925f), new Vector2f(0.25f, 0.25f));
+        guis.add(health);
+        GuiRenderer guiRenderer = new GuiRenderer(loader);
+
         while (!Display.isCloseRequested()) {
             camera.move();
 
@@ -99,9 +108,10 @@ public class Game {
                 renderer.processEntity(entity);
             }
             renderer.render(light, camera);
+            guiRenderer.render(guis);
             updateDisplay();
         }
-
+        guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
         closeDisplay();
