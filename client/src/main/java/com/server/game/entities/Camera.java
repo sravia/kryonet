@@ -28,6 +28,9 @@ public class Camera {
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             position.x -= speed;
         }
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+            position.y += speed;
+        }
 
         int zoom = Mouse.getDWheel();
         if (zoom != 0) {

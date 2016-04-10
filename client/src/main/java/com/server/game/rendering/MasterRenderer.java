@@ -19,8 +19,8 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.glPolygonMode;
 
-
 public class MasterRenderer {
+
     private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
@@ -36,7 +36,6 @@ public class MasterRenderer {
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader = new TerrainShader();
-
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
@@ -57,17 +56,17 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void render(Light sun, Camera camera) {
+    public void render(List<Light> lights, Camera camera) {
         prepare();
         shader.start();
         shader.loadSkyColour(RED, GREEN, BLUE);
-        shader.loadLight(sun);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
         renderer.render(entities);
         shader.stop();
         terrainShader.start();
         terrainShader.loadSkyColour(RED, GREEN, BLUE);
-        terrainShader.loadLight(sun);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
@@ -116,6 +115,5 @@ public class MasterRenderer {
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;
     }
-
 
 }
