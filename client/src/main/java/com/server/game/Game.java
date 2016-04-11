@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.lwjgl.opengl.GL11.glPolygonMode;
-
 public class Game {
 
     private static final int WIDTH = 1280;
@@ -43,48 +41,40 @@ public class Game {
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
         Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
 
+
         RawModel model = OBJLoader.loadObjModel("tree", loader);
 
         TexturedModel tree = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
         TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("grassTexture")));
-        TexturedModel flower = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("flower")));
 
         ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern"));
         fernTexture.setNumberOfRows(2);
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader), fernTexture);
 
         TexturedModel bobble = new TexturedModel(OBJLoader.loadObjModel("lowPolyTree", loader), new ModelTexture(loader.loadTexture("lowPolyTree")));
-        TexturedModel lamp = new TexturedModel(OBJLoader.loadObjModel("lamp", loader), new ModelTexture(loader.loadTexture("lamp")));
 
         grass.getTexture().setHasTransparency(true);
         grass.getTexture().setUseFakeLighting(true);
-        flower.getTexture().setHasTransparency(true);
-        flower.getTexture().setUseFakeLighting(true);
         fern.getTexture().setHasTransparency(true);
 
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             if (i % 7 == 0) {
-                float x = random.nextFloat() * 400 ;
-                float z = random.nextFloat() * 400 - 400;
+                float x = random.nextFloat() * 400;
+                float z = random.nextFloat() * 400-400;
                 float y = terrain.getHeightOfTerrain(x, z);
                 entities.add(new Entity(fern, random.nextInt(4), new Vector3f(x, y, z), 0, random.nextFloat() * 360, 0, 0.9f));
 
                 x = random.nextFloat() * 400;
-                z = random.nextFloat() * 400 - 400;
+                z = random.nextFloat() * 400-400;
                 y = terrain.getHeightOfTerrain(x, z);
                 entities.add(new Entity(grass, new Vector3f(x, y, z), 0, 0, 0, 1.8f));
-
-                x = random.nextFloat() * 400;
-                z = random.nextFloat() * 400 - 400;
-                y = terrain.getHeightOfTerrain(x, z);
-                entities.add(new Entity(flower, new Vector3f(x, y, z), 0, 0, 0, 2.3f));
             }
 
             if (i % 3 == 0) {
                 float x = random.nextFloat() * 400;
-                float z = random.nextFloat() * 400 - 400;
+                float z = random.nextFloat() * 400-400;
                 float y = terrain.getHeightOfTerrain(x, z);
                 entities.add(new Entity(bobble, new Vector3f(x, y, z), 0, random.nextFloat() * 360, 0, random.nextFloat() * 0.1f + 0.6f));
 
@@ -95,16 +85,9 @@ public class Game {
             }
 
         }
-//new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1))
-        List<Light> lights = new ArrayList<Light>();
-        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
-        lights.add(new Light(new Vector3f(100, 10, -293), new Vector3f(4, 0, 0), new Vector3f(1, 0.01f, 0.002f)));
-        lights.add(new Light(new Vector3f(200, 17, -300), new Vector3f(0, 4, 4), new Vector3f(1, 0.01f, 0.002f)));
-        lights.add(new Light(new Vector3f(300, 7, -305), new Vector3f(4, 4, 0), new Vector3f(1, 0.01f, 0.002f)));
 
-        entities.add(new Entity(lamp, new Vector3f(100, -4.7f, -293), 0, 0, 0, 1));
-        entities.add(new Entity(lamp, new Vector3f(200, 4.2f, -300), 0, 0, 0, 1));
-        entities.add(new Entity(lamp, new Vector3f(300, -6.8f, -305), 0, 0, 0, 1));
+
+        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
@@ -122,7 +105,7 @@ public class Game {
             for (Entity entity : entities) {
                 renderer.processEntity(entity);
             }
-            renderer.render(lights, camera);
+            renderer.render(light, camera);
             guiRenderer.render(guis);
             updateDisplay();
         }
