@@ -123,5 +123,7 @@ public class MasterRenderer {
         projectionMatrix.m33 = 0;
     }
 
-
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
+    }
 }

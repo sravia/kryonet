@@ -38,6 +38,8 @@ public class Camera {
         //    setZoom(zoom);
         //}
 
+
+
         calculatePitch();
         calculateAngleAroundPlayer();
     }

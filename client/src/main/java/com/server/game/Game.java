@@ -13,6 +13,7 @@ import com.server.game.terrain.Terrain;
 import com.server.game.textures.ModelTexture;
 import com.server.game.textures.TerrainTexture;
 import com.server.game.textures.TerrainTexturePack;
+import com.server.game.toolbox.MousePicker;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector2f;
@@ -93,8 +94,8 @@ public class Game {
         lights.add(new Light(new Vector3f(370, 20, -300), new Vector3f(0, 2, 2), new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(293, 20, -305), new Vector3f(2, 2, 0), new Vector3f(1, 0.01f, 0.002f)));
 
-
-        entities.add(new Entity(lamp,new Vector3f(185,terrain.getHeightOfTerrain(185, -293),-293),0,0,0,1));
+        Entity lampEntity = new Entity(lamp,new Vector3f(185,terrain.getHeightOfTerrain(185, -293),-293),0,0,0,1);
+        entities.add(lampEntity);
         entities.add(new Entity(lamp,new Vector3f(370,terrain.getHeightOfTerrain(370, -300),-300),0,0,0,1));
         entities.add(new Entity(lamp,new Vector3f(293,terrain.getHeightOfTerrain(293,-305),-305),0,0,0,1));
 
@@ -106,6 +107,8 @@ public class Game {
         GuiTexture health = new GuiTexture(loader.loadTexture("health"), new Vector2f(-0.74f, 0.925f), new Vector2f(0.25f, 0.25f));
         guis.add(health);
         GuiRenderer guiRenderer = new GuiRenderer(loader);
+
+        //MousePicker picker = new MousePicker(camera,renderer.getProjectionMatrix(),terrain);
 
         while (!Display.isCloseRequested()) {
             camera.move();
