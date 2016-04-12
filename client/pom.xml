@@ -4,10 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>kryonet</groupId>
-    <artifactId>kryonet</artifactId>
-    <version>1.0-SNAPSHOT</version>
+	<parent>
+        <groupId>aoe</groupId>
+        <artifactId>aoe-parent</artifactId>
+        <version>1.0</version>
+    </parent>
 
+    <groupId>aoe.client</groupId>
+    <artifactId>client</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
 
     <dependencies>
         <dependency>
@@ -26,11 +32,6 @@
             <version>2.9.3</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-        <dependency>
             <groupId>org.slick2d</groupId>
             <artifactId>slick2d-core</artifactId>
             <version>1.0.1</version>
@@ -40,7 +41,5 @@
             <artifactId>pngdecoder</artifactId>
             <version>1.0</version>
         </dependency>
-
-
     </dependencies>
 </project>

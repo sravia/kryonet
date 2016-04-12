@@ -28,7 +28,7 @@ public class Network extends Listener {
     }
 
     public void connected(Connection c) {
-        LOGGER.info("Received a connection from " + c.getRemoteAddressTCP().getHostString());
+        LOGGER.info("Received a connection from " + c.getRemoteAddressTCP().getHostName());
         PacketMessage packetMessage = new PacketMessage();
         packetMessage.message = "The time is: " + new Date().toString();
 
