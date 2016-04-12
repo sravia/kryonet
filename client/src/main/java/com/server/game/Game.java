@@ -99,7 +99,7 @@ public class Game {
         entities.add(new Entity(lamp,new Vector3f(293,terrain.getHeightOfTerrain(293,-305),-305),0,0,0,1));
 
         Camera camera = new Camera();
-        MasterRenderer renderer = new MasterRenderer();
+        MasterRenderer renderer = new MasterRenderer(loader);
 
 
         List<GuiTexture> guis = new ArrayList<GuiTexture>();
