@@ -50,9 +50,9 @@ public class Game {
         ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern"));
         fernTexture.setNumberOfRows(2);
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader), fernTexture);
-
+        TexturedModel lamp = new TexturedModel(OBJLoader.loadObjModel("lamp", loader), new ModelTexture(loader.loadTexture("lamp")));
         TexturedModel bobble = new TexturedModel(OBJLoader.loadObjModel("lowPolyTree", loader), new ModelTexture(loader.loadTexture("lowPolyTree")));
-
+        lamp.getTexture().setUseFakeLighting(true);
         grass.getTexture().setHasTransparency(true);
         grass.getTexture().setUseFakeLighting(true);
         fern.getTexture().setHasTransparency(true);
@@ -87,7 +87,16 @@ public class Game {
         }
 
 
-        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
+        List<Light> lights = new ArrayList<Light>();
+        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
+        lights.add(new Light(new Vector3f(185, 20, -293), new Vector3f(2, 0, 0), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(370, 20, -300), new Vector3f(0, 2, 2), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(293, 20, -305), new Vector3f(2, 2, 0), new Vector3f(1, 0.01f, 0.002f)));
+
+
+        entities.add(new Entity(lamp,new Vector3f(185,terrain.getHeightOfTerrain(185, -293),-293),0,0,0,1));
+        entities.add(new Entity(lamp,new Vector3f(370,terrain.getHeightOfTerrain(370, -300),-300),0,0,0,1));
+        entities.add(new Entity(lamp,new Vector3f(293,terrain.getHeightOfTerrain(293,-305),-305),0,0,0,1));
 
         Camera camera = new Camera();
         MasterRenderer renderer = new MasterRenderer();
@@ -105,7 +114,7 @@ public class Game {
             for (Entity entity : entities) {
                 renderer.processEntity(entity);
             }
-            renderer.render(light, camera);
+            renderer.render(lights, camera);
             guiRenderer.render(guis);
             updateDisplay();
         }
