@@ -6,11 +6,13 @@ import com.game.entities.Light;
 import com.game.models.TexturedModel;
 import com.game.shaders.StaticShader;
 import com.game.shaders.TerrainShader;
+import com.game.shadows.ShadowMapMasterRenderer;
 import com.game.terrains.Terrain;
 import com.game.normalMappingRenderer.NormalMappingRenderer;
 import com.game.skybox.SkyboxRenderer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -25,9 +27,9 @@ public class MasterRenderer {
     public static final float RED = 0.1f;
     public static final float GREEN = 0.4f;
     public static final float BLUE = 0.2f;
-    private static final float FOV = 70;
-    private static final float NEAR_PLANE = 0.1f;
-    private static final float FAR_PLANE = 1000;
+    public static final float FOV = 70;
+    public static final float NEAR_PLANE = 0.1f;
+    public static final float FAR_PLANE = 1000;
     private Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
@@ -39,18 +41,20 @@ public class MasterRenderer {
     private NormalMappingRenderer normalMapRenderer;
 
     private SkyboxRenderer skyboxRenderer;
+    private ShadowMapMasterRenderer shadowMapMasterRenderer;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private Map<TexturedModel, List<Entity>> normalMapEntities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
 
-    public MasterRenderer(Loader loader) {
+    public MasterRenderer(Loader loader,Camera camera) {
         enableCulling();
         createProjectionMatrix();
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
         skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
         normalMapRenderer = new NormalMappingRenderer(projectionMatrix);
+        this.shadowMapMasterRenderer = new ShadowMapMasterRenderer(camera);
     }
 
     public static void enableCulling() {
@@ -95,7 +99,7 @@ public class MasterRenderer {
         terrainShader.loadSkyColour(RED, GREEN, BLUE);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
-        terrainRenderer.render(terrains);
+        terrainRenderer.render(terrains,shadowMapMasterRenderer.getToShadowMapSpaceMatrix());
         terrainShader.stop();
         skyboxRenderer.render(camera, RED, GREEN, BLUE);
         terrains.clear();
@@ -131,25 +135,40 @@ public class MasterRenderer {
         }
     }
 
+    public void renderShadowMap(List<Entity> entityList, Light sun){
+        for(Entity entity: entityList){
+            processEntity(entity);
+        }
+        shadowMapMasterRenderer.render(entities,sun);
+        entities.clear();
+    }
+
+    public int getShadowMapTexture(){
+        return shadowMapMasterRenderer.getShadowMap();
+    }
+
     public void cleanUp() {
         shader.cleanUp();
         terrainShader.cleanUp();
         normalMapRenderer.cleanUp();
+        shadowMapMasterRenderer.cleanUp();
     }
 
     public void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(RED, GREEN, BLUE, 1);
+        GL13.glActiveTexture(GL13.GL_TEXTURE5);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,getShadowMapTexture());
     }
 
-    private void createProjectionMatrix() {
+    private void createProjectionMatrix(){
+        projectionMatrix = new Matrix4f();
         float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;
 
-        projectionMatrix = new Matrix4f();
         projectionMatrix.m00 = x_scale;
         projectionMatrix.m11 = y_scale;
         projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);

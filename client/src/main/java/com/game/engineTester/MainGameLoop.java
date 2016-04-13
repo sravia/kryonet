@@ -50,7 +50,15 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
         TextMaster.init(loader);
-        MasterRenderer renderer = new MasterRenderer(loader);
+
+        RawModel bunnyModel = OBJLoader.loadObjModel("person", loader);
+        TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(
+                loader.loadTexture("playerTexture")));
+
+        Player player = new Player(stanfordBunny, new Vector3f(75, 5, -75), 0, 100, 0, 0.6f);
+        Camera camera = new Camera(player);
+
+        MasterRenderer renderer = new MasterRenderer(loader,camera);
         ParticleMaster.init(loader,renderer.getProjectionMatrix());
 
         FontType font = new FontType(loader.loadTexture("candara"), new File(Config.RESOURCE_PATH+"candara.fnt"));
@@ -85,7 +93,7 @@ public class MainGameLoop {
 
         fern.getTexture().setHasTransparency(true);
 
-        Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
+        Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
         List<Terrain> terrains = new ArrayList<Terrain>();
         terrains.add(terrain);
 
@@ -127,7 +135,7 @@ public class MainGameLoop {
         normalMapEntities.add(entity3);
 
         Random random = new Random(5666778);
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 160; i++) {
             if (i % 3 == 0) {
                 float x = random.nextFloat() * 150;
                 float z = random.nextFloat() * -150;
@@ -154,21 +162,21 @@ public class MainGameLoop {
         }
         entities.add(new Entity(rocks, new Vector3f(75, 4.6f, -75), 0, 0, 0, 75));
 
+        entities.add(player);
+
         //*******************OTHER SETUP***************
 
         List<Light> lights = new ArrayList<Light>();
-        Light sun = new Light(new Vector3f(10000, 10000, -10000), new Vector3f(1.3f, 1.3f, 1.3f));
+        Light sun = new Light(new Vector3f(1000000, 1500000, -1000000), new Vector3f(1.3f, 1.3f, 1.3f));
         lights.add(sun);
 
 
-        RawModel bunnyModel = OBJLoader.loadObjModel("person", loader);
-        TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(
-                loader.loadTexture("playerTexture")));
 
-        Player player = new Player(stanfordBunny, new Vector3f(75, 5, -75), 0, 100, 0, 0.6f);
-        entities.add(player);
-        Camera camera = new Camera(player);
         List<GuiTexture> guiTextures = new ArrayList<GuiTexture>();
+
+        //GuiTexture shadowMap = new GuiTexture(renderer.getShadowMapTexture(),new Vector2f(0.5f,0.5f),new Vector2f(0.5f,0.5f));
+        //guiTextures.add(shadowMap);
+
         GuiRenderer guiRenderer = new GuiRenderer(loader);
         MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
@@ -199,6 +207,8 @@ public class MainGameLoop {
             picker.update();
             system.generateParticles(new Vector3f(player.getPosition()));
             ParticleMaster.update(camera);
+
+            renderer.renderShadowMap(entities,sun);
 
             entity.increaseRotation(0, 1, 0);
             entity2.increaseRotation(0, 1, 0);
