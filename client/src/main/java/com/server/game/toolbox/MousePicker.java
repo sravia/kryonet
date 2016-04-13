@@ -1,8 +1,7 @@
 package com.server.game.toolbox;
 
-
 import com.server.game.entities.Camera;
-import com.server.game.terrain.Terrain;
+import com.server.game.terrains.Terrain;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;

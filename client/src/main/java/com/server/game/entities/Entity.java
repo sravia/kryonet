@@ -1,6 +1,7 @@
 package com.server.game.entities;
 
-import com.server.game.model.TexturedModel;
+
+import com.server.game.models.TexturedModel;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Entity {
@@ -12,7 +13,8 @@ public class Entity {
 
     private int textureIndex = 0;
 
-    public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+    public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+                  float scale) {
         this.model = model;
         this.position = position;
         this.rotX = rotX;
@@ -21,14 +23,25 @@ public class Entity {
         this.scale = scale;
     }
 
-    public Entity(TexturedModel model,int textureIndex, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+    public Entity(TexturedModel model, int index, Vector3f position, float rotX, float rotY, float rotZ,
+                  float scale) {
+        this.textureIndex = index;
         this.model = model;
-        this.textureIndex = textureIndex;
         this.position = position;
         this.rotX = rotX;
         this.rotY = rotY;
         this.rotZ = rotZ;
         this.scale = scale;
+    }
+
+    public float getTextureXOffset() {
+        int column = textureIndex % model.getTexture().getNumberOfRows();
+        return (float) column / (float) model.getTexture().getNumberOfRows();
+    }
+
+    public float getTextureYOffset() {
+        int row = textureIndex / model.getTexture().getNumberOfRows();
+        return (float) row / (float) model.getTexture().getNumberOfRows();
     }
 
     public void increasePosition(float dx, float dy, float dz) {
@@ -41,20 +54,6 @@ public class Entity {
         this.rotX += dx;
         this.rotY += dy;
         this.rotZ += dz;
-    }
-
-    public int getTextureIndex() {
-        return textureIndex;
-    }
-
-    public float getTextureXOffset() {
-        int column = textureIndex % model.getTexture().getNumberOfRows();
-        return (float) column / (float) model.getTexture().getNumberOfRows();
-    }
-
-    public float getTextureYOffset() {
-        int row = textureIndex / model.getTexture().getNumberOfRows();
-        return (float) row / (float) model.getTexture().getNumberOfRows();
     }
 
     public TexturedModel getModel() {
@@ -104,6 +103,5 @@ public class Entity {
     public void setScale(float scale) {
         this.scale = scale;
     }
-
 
 }

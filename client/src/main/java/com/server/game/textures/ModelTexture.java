@@ -3,6 +3,7 @@ package com.server.game.textures;
 public class ModelTexture {
 
     private int textureID;
+    private int normalMap;
 
     private float shineDamper = 1;
     private float reflectivity = 0;
@@ -12,8 +13,8 @@ public class ModelTexture {
 
     private int numberOfRows = 1;
 
-    public ModelTexture(int textureID) {
-        this.textureID = textureID;
+    public ModelTexture(int texture) {
+        this.textureID = texture;
     }
 
     public int getNumberOfRows() {
@@ -22,6 +23,14 @@ public class ModelTexture {
 
     public void setNumberOfRows(int numberOfRows) {
         this.numberOfRows = numberOfRows;
+    }
+
+    public int getNormalMap() {
+        return normalMap;
+    }
+
+    public void setNormalMap(int normalMap) {
+        this.normalMap = normalMap;
     }
 
     public boolean isHasTransparency() {
@@ -40,8 +49,16 @@ public class ModelTexture {
         this.useFakeLighting = useFakeLighting;
     }
 
-    public int getTextureID() {
-        return this.textureID;
+    public int getID() {
+        return textureID;
+    }
+
+    public float getShineDamper() {
+        return shineDamper;
+    }
+
+    public void setShineDamper(float shineDamper) {
+        this.shineDamper = shineDamper;
     }
 
     public float getReflectivity() {
@@ -52,11 +69,4 @@ public class ModelTexture {
         this.reflectivity = reflectivity;
     }
 
-    public float getShineDamper() {
-        return shineDamper;
-    }
-
-    public void setShineDamper(float shineDamper) {
-        this.shineDamper = shineDamper;
-    }
 }

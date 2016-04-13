@@ -8,10 +8,10 @@ public class TextureData {
     private int height;
     private ByteBuffer buffer;
 
-    public TextureData(ByteBuffer buffer,int width, int height) {
+    public TextureData(ByteBuffer buffer, int width, int height) {
+        this.buffer = buffer;
         this.width = width;
         this.height = height;
-        this.buffer = buffer;
     }
 
     public int getWidth() {
@@ -25,4 +25,5 @@ public class TextureData {
     public ByteBuffer getBuffer() {
         return buffer;
     }
+
 }
