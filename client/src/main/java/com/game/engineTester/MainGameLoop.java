@@ -135,10 +135,10 @@ public class MainGameLoop {
         normalMapEntities.add(entity3);
 
         Random random = new Random(5666778);
-        for (int i = 0; i < 160; i++) {
+        for (int i = 0; i < 500; i++) {
             if (i % 3 == 0) {
-                float x = random.nextFloat() * 150;
-                float z = random.nextFloat() * -150;
+                float x = random.nextFloat() * 800;
+                float z = random.nextFloat() * -800;
                 if ((x > 50 && x < 100) || (z < -50 && z > -100)) {
                 } else {
                     float y = terrain.getHeightOfTerrain(x, z);
@@ -149,8 +149,8 @@ public class MainGameLoop {
             }
             if (i % 2 == 0) {
 
-                float x = random.nextFloat() * 150;
-                float z = random.nextFloat() * -150;
+                float x = random.nextFloat() * 800;
+                float z = random.nextFloat() * -800;
                 if ((x > 50 && x < 100) || (z < -50 && z > -100)) {
 
                 } else {

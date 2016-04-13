@@ -40,6 +40,7 @@ public class EntityRenderer {
             }
             unbindTexturedModel();
         }
+        shader.get().stop();
     }
 
     private void prepareTexturedModel(TexturedModel model) {
