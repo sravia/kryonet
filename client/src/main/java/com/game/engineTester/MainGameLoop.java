@@ -184,7 +184,12 @@ public class MainGameLoop {
 
         ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"),4,true);
 
-        ParticleSystem system = new ParticleSystem(particleTexture,50,25,0.3f,4);
+        ParticleSystem system = new ParticleSystem(particleTexture,50,25,0.3f,4,1);
+        system.randomizeRotation();
+        system.setDirection(new Vector3f(0,1,0),0.1f);
+        system.setLifeError(0.1f);
+        system.setSpeedError(0.4f);
+        system.setScaleError(0.8f);
 
         //****************Game Loop Below*********************
 
@@ -192,9 +197,8 @@ public class MainGameLoop {
             player.move(terrain);
             camera.move();
             picker.update();
-            system.generateParticles(player.getPosition());
+            system.generateParticles(new Vector3f(player.getPosition()));
             ParticleMaster.update(camera);
-
 
             entity.increaseRotation(0, 1, 0);
             entity2.increaseRotation(0, 1, 0);
