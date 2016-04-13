@@ -5,6 +5,7 @@ import com.game.objConverter.OBJFileLoader;
 import com.game.particles.Particle;
 import com.game.particles.ParticleMaster;
 import com.game.particles.ParticleSystem;
+import com.game.particles.ParticleTexture;
 import com.game.renderEngine.Loader;
 import com.game.textures.ModelTexture;
 import com.game.entities.Camera;
@@ -181,7 +182,9 @@ public class MainGameLoop {
         waters.add(water);
 
 
-        ParticleSystem system = new ParticleSystem(50,25,0.3f,4);
+        ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"),4,true);
+
+        ParticleSystem system = new ParticleSystem(particleTexture,50,25,0.3f,4);
 
         //****************Game Loop Below*********************
 
@@ -190,7 +193,7 @@ public class MainGameLoop {
             camera.move();
             picker.update();
             system.generateParticles(player.getPosition());
-            ParticleMaster.update();
+            ParticleMaster.update(camera);
 
 
             entity.increaseRotation(0, 1, 0);

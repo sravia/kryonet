@@ -15,7 +15,10 @@ public class ParticleSystem {
     private float gravityComplient;
     private float lifeLength;
 
-    public ParticleSystem(float pps, float speed, float gravityComplient, float lifeLength) {
+    private ParticleTexture texture;
+
+    public ParticleSystem(ParticleTexture texture, float pps, float speed, float gravityComplient, float lifeLength) {
+        this.texture = texture;
         this.pps = pps;
         this.speed = speed;
         this.gravityComplient = gravityComplient;
@@ -41,7 +44,7 @@ public class ParticleSystem {
         Vector3f velocity = new Vector3f(dirX, 1, dirZ);
         velocity.normalise();
         velocity.scale(speed);
-        new Particle(new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
+        new Particle(texture, new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
     }
 
 
