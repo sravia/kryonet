@@ -101,7 +101,7 @@ public class Loader {
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0f);
             if(GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic){
                 float amount = Math.min(4f,GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT));
-                GL11.glTexParameterf(GL11.GL_TEXTURE_2D,EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT,amount);
+                //GL11.glTexParameterf(GL11.GL_TEXTURE_2D,EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT,amount);
             }else{
                 System.out.println("GL_EXT_texture_filter_anisotropic not supported");
             }

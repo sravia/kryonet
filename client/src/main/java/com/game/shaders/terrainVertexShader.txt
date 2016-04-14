@@ -18,7 +18,7 @@ uniform vec3 lightPosition[4];
 
 uniform mat4 toShadowMapSpace;
 
-const float density = 0.007;
+const float density = 0;
 const float gradient = 5.0;
 const float shadowDistance = 100.0;
 const float transitionDistance = 10.0;
@@ -48,6 +48,6 @@ void main(void){
 
 	distance = distance - (shadowDistance - transitionDistance);
 	distance = distance / transitionDistance;
-	shadowCoords.w = clamp(1.0-distance,0.0,1.0);
+	shadowCoords.w = clamp(1.0 - distance, 0.0, 1.0);
 
 }

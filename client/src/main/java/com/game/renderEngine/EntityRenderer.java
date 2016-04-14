@@ -36,7 +36,7 @@ public class EntityRenderer {
             for (Entity entity : batch) {
                 prepareInstance(entity);
                 GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(),
-                        GL11.GL_UNSIGNED_INT, 0);
+                        GL11.GL_UNSIGNED_INT, 0);//GL_LINE_STRIP
             }
             unbindTexturedModel();
         }
@@ -58,6 +58,7 @@ public class EntityRenderer {
         shader.get().loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
+
     }
 
     private void unbindTexturedModel() {
