@@ -1,6 +1,6 @@
 package com;
 
-import com.game.engineTester.MainGameLoop;
+import com.engine.Engine;
 import com.net.Network;
 
 public class Client {
@@ -10,7 +10,7 @@ public class Client {
     public Client() throws Exception {
         network = new Network();
         //network.start();
-        new MainGameLoop().run();
+        new Engine().run();
     }
 
     public static void main(String[] args) throws Exception {

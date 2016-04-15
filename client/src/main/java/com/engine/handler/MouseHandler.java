@@ -1,0 +1,37 @@
+package com.engine.handler;
+
+import com.engine.rendering.Loader;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.util.vector.Vector2f;
+
+import java.util.Arrays;
+
+public class MouseHandler {
+
+    private Vector2f[] selectedArea = new Vector2f[2];
+    private Loader loader;
+
+    public MouseHandler(Loader loader){
+        this.loader = loader;
+    }
+
+    public void start() {
+        detectSelection();
+    }
+
+    private void detectSelection() {
+        if (Mouse.isButtonDown(0)) {
+            if (selectedArea[0] == null) {
+                selectedArea[0] = new Vector2f(Mouse.getX(),Mouse.getY());
+            }
+        }
+
+        if (!Mouse.isButtonDown(3)) {
+            selectedArea[1] = new Vector2f(Mouse.getX(),Mouse.getY());
+        }
+        if(selectedArea[0] != null){
+
+        }
+        System.out.println(Arrays.toString(selectedArea));
+    }
+}
