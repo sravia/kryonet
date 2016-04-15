@@ -11,7 +11,6 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import java.util.List;
 
-
 public class GuiRenderer {
 
     private final RawModel quad;
@@ -36,7 +35,7 @@ public class GuiRenderer {
             Matrix4f matrix = Math.createTransformationMatrix(gui.getPosition(), gui.getScale());
             shader.loadTransformation(matrix);
             shader.loadVisibility(gui.getVisibility());
-            GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+            GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, quad.getVertexCount());
         }
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_BLEND);

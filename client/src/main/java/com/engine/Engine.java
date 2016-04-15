@@ -118,7 +118,7 @@ public class Engine {
         closeDisplay();
     }
 
-    public static void createDisplay() {
+    private static void createDisplay() {
         ContextAttribs contextAttribs = new ContextAttribs(3, 3)
                 .withForwardCompatible(true)
                 .withProfileCore(true);
