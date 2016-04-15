@@ -1,9 +1,13 @@
 package com.engine;
 
+import com.Config;
 import com.engine.entities.Camera;
 import com.engine.entities.Entity;
 import com.engine.entities.Light;
+import com.engine.fonts.FontRenderer;
 import com.engine.fonts.TextMaster;
+import com.engine.fonts.mesh.FontType;
+import com.engine.fonts.mesh.GUIText;
 import com.engine.guis.GuiRenderer;
 import com.engine.guis.GuiTexture;
 import com.engine.handler.MouseHandler;
@@ -23,11 +27,13 @@ import com.engine.water.WaterShader;
 import com.engine.water.WaterTile;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,21 +102,30 @@ public class Engine {
         GuiTexture shadowMap = new GuiTexture(loader.loadTexture("my/black"), new Vector2f(0.1f,0.1f),new Vector2f(0.5f,0.1f),0.5f);
         guiTextures.add(shadowMap);
 
+        GL11.glOrtho(0, 800, 0, 600, 1, -1);
+
+        FontType font = new FontType(loader.loadTexture("candara"), new File(Config.RESOURCE_PATH+"candara.fnt"));
+        GUIText mousePositionText = new GUIText("Mouse: " + Mouse.getX() + " - " + Mouse.getY(), 1f, font, new Vector2f(0.3f, 0.0f), 1f, true);
+        TextMaster.loadText(mousePositionText);
+
         while (!Display.isCloseRequested()) {
             camera.move();
             picker.update();
 
-            mouseHandler.start();
 
             renderer.renderShadowMap(entities, sun);
             renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 100000));
             waterRenderer.render(waters, camera, sun);
             guiRenderer.render(guiTextures);
+            mousePositionText.setTextString("Mouse: " + Mouse.getX() + " - " + Mouse.getY());
+            TextMaster.render();
+            mouseHandler.start();
 
             updateDisplay();
         }
 
         guiRenderer.cleanUp();
+        TextMaster.cleanUp();
         buffers.cleanUp();
         waterShader.cleanUp();
         renderer.cleanUp();
@@ -119,13 +134,12 @@ public class Engine {
     }
 
     private static void createDisplay() {
-        ContextAttribs contextAttribs = new ContextAttribs(3, 3)
-                .withForwardCompatible(true)
-                .withProfileCore(true);
+        //ContextAttribs contextAttribs = new ContextAttribs(3, 3).withForwardCompatible(true).withProfileCore(true);
 
         try {
             setDisplayMode(WIDTH, HEIGHT,false);
-            Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT), contextAttribs);
+            //Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT), contextAttribs);
+            Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT));
             Display.setTitle("V1");
             GL11.glEnable(GL13.GL_MULTISAMPLE);
         } catch (LWJGLException e) {
