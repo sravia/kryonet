@@ -102,8 +102,6 @@ public class Engine {
         GuiTexture shadowMap = new GuiTexture(loader.loadTexture("my/black"), new Vector2f(0.1f,0.1f),new Vector2f(0.5f,0.1f),0.5f);
         guiTextures.add(shadowMap);
 
-        GL11.glOrtho(0, 800, 0, 600, 1, -1);
-
         FontType font = new FontType(loader.loadTexture("candara"), new File(Config.RESOURCE_PATH+"candara.fnt"));
         GUIText mousePositionText = new GUIText("Mouse: " + Mouse.getX() + " - " + Mouse.getY(), 1f, font, new Vector2f(0.3f, 0.0f), 1f, true);
         TextMaster.loadText(mousePositionText);
@@ -134,12 +132,11 @@ public class Engine {
     }
 
     private static void createDisplay() {
-        //ContextAttribs contextAttribs = new ContextAttribs(3, 3).withForwardCompatible(true).withProfileCore(true);
+        ContextAttribs contextAttribs = new ContextAttribs(3, 3).withForwardCompatible(true).withProfileCore(true);
 
         try {
             setDisplayMode(WIDTH, HEIGHT,false);
-            //Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT), contextAttribs);
-            Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT));
+            Display.create(new PixelFormat().withSamples(ANTIALIASING_COUNT), contextAttribs);
             Display.setTitle("V1");
             GL11.glEnable(GL13.GL_MULTISAMPLE);
         } catch (LWJGLException e) {
