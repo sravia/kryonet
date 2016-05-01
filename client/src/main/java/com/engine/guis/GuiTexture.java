@@ -1,19 +1,24 @@
 package com.engine.guis;
 
+import com.engine.models.RawModel;
 import org.lwjgl.util.vector.Vector2f;
 
 public class GuiTexture {
 
     private int texture;
     private Vector2f position;
-    private Vector2f scale;
+    private RawModel rawModel;
     private float visibility;
 
-    public GuiTexture(int texture, Vector2f position, Vector2f scale, float visibility) {
+    public GuiTexture(int texture, RawModel rawModel, Vector2f position, float visibility) {
         this.texture = texture;
         this.position = position;
-        this.scale = scale;
+        this.rawModel = rawModel;
         this.visibility = visibility;
+    }
+
+    public void setPosition(Vector2f position) {
+        this.position = position;
     }
 
     public float getVisibility() {
@@ -28,8 +33,8 @@ public class GuiTexture {
         return position;
     }
 
-    public Vector2f getScale() {
-        return scale;
+    public RawModel getRawModel() {
+        return rawModel;
     }
 
 

@@ -8,11 +8,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Math {
 
-    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+    public static Matrix4f createTransformationMatrix(Vector2f translation) {
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();
         Matrix4f.translate(translation, matrix, matrix);
-        Matrix4f.scale(new Vector3f(scale.x, scale.y, 0f), matrix, matrix);
         return matrix;
     }
 

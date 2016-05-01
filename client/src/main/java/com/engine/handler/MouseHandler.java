@@ -1,5 +1,8 @@
 package com.engine.handler;
 
+import com.Config;
+import com.engine.Engine;
+import com.engine.guis.GuiTexture;
 import com.engine.rendering.Loader;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -11,9 +14,20 @@ public class MouseHandler {
 
     private Vector2f[] selectedArea = new Vector2f[2];
     private Loader loader;
+    private GuiTexture guiTexture;
 
     public MouseHandler(Loader loader){
         this.loader = loader;
+
+        float[] vertices = {
+                0.0f,  0.5f, 0.0f,
+                -0.5f, 0.5f, 0.0f,
+                -0.5f, 0.0f, 0.0f,
+                0.0f,0.0f,0.0f
+
+        };
+        guiTexture = new GuiTexture(loader.loadTexture("my/black"), loader.loadToVAO(vertices,3),new Vector2f(0.1f,0.1f),0.5f);
+        Engine.guiTextures.add(guiTexture);
     }
 
     public void start() {
@@ -21,34 +35,24 @@ public class MouseHandler {
     }
 
     private void detectSelection() {
+        float x = (float) (-1.0 + 2.0 * Mouse.getX() / Config.WIDTH);
+        float y = (float) -(1.0 - 2.0 * Mouse.getY() / Config.HEIGHT);
+
         if (Mouse.isButtonDown(0)) {
             if (selectedArea[0] == null) {
-                selectedArea[0] = new Vector2f(Mouse.getX(),Mouse.getY());
+                selectedArea[0] = new Vector2f(x,y);
             }
+            selectedArea[1] = new Vector2f(x,y);
+        }else{
+            selectedArea[0] = null;
+            selectedArea[1] = null;
         }
 
-        if (!Mouse.isButtonDown(3)) {
-            selectedArea[1] = new Vector2f(Mouse.getX(),Mouse.getY());
-        }
 
-        if(selectedArea[0] != null){
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBegin(GL11.GL_QUADS);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glColor4f(1.0f,1.0f,1.0f,0.5f);
-            GL11.glVertex2f(selectedArea[0].x,selectedArea[0].y);
-            GL11.glVertex2f(selectedArea[0].x,selectedArea[1].y);
-            GL11.glVertex2f(selectedArea[1].x,selectedArea[1].y);
-            GL11.glVertex2f(selectedArea[1].x,selectedArea[0].y);
-            System.out.println("--------------------------");
-            System.out.println(selectedArea[0].x + " - "+selectedArea[0].y);
-            System.out.println(selectedArea[0].x + " - "+selectedArea[1].y);
-            System.out.println(selectedArea[1].x + " - "+selectedArea[1].y);
-            System.out.println(selectedArea[1].x + " - "+selectedArea[0].y);
-            System.out.println("--------------------------");
 
-            GL11.glEnd();
-            GL11.glDisable(GL11.GL_BLEND);
+        if(selectedArea[0] != null && selectedArea[1] != null){
+            //guiTexture.setPosition(new Vector2f((selectedArea[0].y - selectedArea[1].y) / 2,(selectedArea[0].y - selectedArea[1].y) / 2));
+
         }
         System.out.println(Arrays.toString(selectedArea));
     }

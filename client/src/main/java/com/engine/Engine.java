@@ -99,9 +99,6 @@ public class Engine {
         waters.add(water);
 
 
-        GuiTexture shadowMap = new GuiTexture(loader.loadTexture("my/black"), new Vector2f(0.1f,0.1f),new Vector2f(0.5f,0.1f),0.5f);
-        guiTextures.add(shadowMap);
-
         FontType font = new FontType(loader.loadTexture("candara"), new File(Config.RESOURCE_PATH+"candara.fnt"));
         GUIText mousePositionText = new GUIText("Mouse: " + Mouse.getX() + " - " + Mouse.getY(), 1f, font, new Vector2f(0.3f, 0.0f), 1f, true);
         TextMaster.loadText(mousePositionText);
@@ -109,7 +106,6 @@ public class Engine {
         while (!Display.isCloseRequested()) {
             camera.move();
             picker.update();
-
 
             renderer.renderShadowMap(entities, sun);
             renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 100000));
